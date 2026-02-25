@@ -181,10 +181,18 @@
         margin-left: 1rem;
       }
 
-      /* section defaults */
+      /* section defaults - full viewport height */
       section {
+        min-height: 100vh;
         padding: 60px 0;
-        scroll-margin-top: 80px;
+        scroll-margin-top: 80px; /* account for sticky nav */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      /* adjust home section to keep text centered */
+      .home {
+        justify-content: center;
       }
 
       h2 {
@@ -200,7 +208,7 @@
 
       /* ----- HERO ----- */
       .home {
-        min-height: auto;
+        min-height: 100vh;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -285,9 +293,41 @@
 
       .skill-icon {
         font-size: 3.2rem;
-        color: var(--accent);
+        color: var(--accent); /* dark theme default */
         margin-bottom: 12px;
       }
+
+      /* brand colors in light mode */
+      body:not(.dark-theme) .skill-icon.fa-java {
+        color: #f89820;
+      }
+      body:not(.dark-theme) .skill-icon.fa-js {
+        color: #f7df1e;
+      }
+      body:not(.dark-theme) .skill-icon.fa-python {
+        color: #3776ab;
+      }
+      body:not(.dark-theme) .skill-icon.fa-html5 {
+        color: #e34c26;
+      }
+      body:not(.dark-theme) .skill-icon.fa-css3-alt {
+        color: #264de4;
+      }
+      body:not(.dark-theme) .skill-icon.fa-react {
+        color: #61dafb;
+      }
+      body:not(.dark-theme) .skill-icon.fa-database {
+        color: #00758f;
+      } /* MySQL */
+      body:not(.dark-theme) .skill-icon.fa-code {
+        color: #333;
+      } /* C */
+      body:not(.dark-theme) .skill-icon.fa-copyright {
+        color: #00599c;
+      } /* C++ */
+      body:not(.dark-theme) .skill-icon.fa-bolt {
+        color: #38bdf8;
+      } /* Tailwind */
 
       .skill-name {
         font-weight: 600;
@@ -417,7 +457,7 @@
         box-shadow: 0 8px 14px rgba(0, 0, 0, 0.2);
       }
 
-      /* experience */
+      /* volunteering (formerly experience) */
       .exp-item {
         background-color: var(--card-bg);
         border-left: 6px solid var(--accent);
@@ -644,29 +684,37 @@
         border-radius: 50%;
         background: var(--accent);
         border: 3px solid var(--bg-secondary);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 0 15px var(--accent); /* subtle glow */
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); /* subtle shadow, no glow */
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: transform 0.2s, box-shadow var(--transition);
+        transition: opacity 0.3s ease, transform 0.3s ease,
+          box-shadow var(--transition);
         z-index: 1002;
       }
       .chatbot-button:hover {
         transform: scale(1.05);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 20px var(--accent);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
       }
 
-      /* new modern icon inside button */
+      /* entire button vanishes on expand */
+      .chatbot-container.expanded .chatbot-button {
+        opacity: 0;
+        transform: scale(0);
+        pointer-events: none;
+      }
+
       .chatbot-button i {
         font-size: 2.2rem;
-        color: white; /* always white for contrast */
+        color: white;
+        transition: inherit;
       }
 
       .chatbot-window {
         width: 320px;
         background: var(--bg-secondary);
-        border-radius: 24px 24px 24px 8px; /* bottom-right sharp for button alignment */
+        border-radius: 24px 24px 24px 8px;
         border: 1px solid var(--border-color);
         box-shadow: var(--shadow);
         overflow: hidden;
@@ -785,7 +833,6 @@
         .hamburger {
           display: block;
         }
-        /* keep theme toggle visible */
         .theme-toggle {
           margin-left: 0;
         }
@@ -817,7 +864,7 @@
     <!-- SINGLE macOS WINDOW -->
     <div class="mac-window">
       <div class="window-content">
-        <!-- Sticky navigation with three dots and theme toggle (moved before hamburger) -->
+        <!-- Sticky navigation with three dots and theme toggle (before hamburger) -->
         <div class="nav-inline" id="stickyNav">
           <div class="nav-dots">
             <span class="dot red"></span>
@@ -828,7 +875,8 @@
             <li><a href="#home">Home</a></li>
             <li><a href="#skills">Skills</a></li>
             <li><a href="#projects">Projects</a></li>
-            <li><a href="#experience">Experience</a></li>
+            <li><a href="#experience">Volunteering</a></li>
+            <!-- Updated nav text -->
             <li><a href="#contact">Contact</a></li>
           </ul>
           <!-- Theme toggle button now outside ul and before hamburger -->
@@ -984,6 +1032,7 @@
           <div class="projects-container">
             <div class="project-card" data-project="1">
               <img
+                id="project-img-1"
                 src="https://placehold.co/600x400/3a3a3c/0a84ff?text=Duty+Chart+Generator"
                 alt="Duty Chart"
               />
@@ -1000,6 +1049,7 @@
             </div>
             <div class="project-card" data-project="2">
               <img
+                id="project-img-2"
                 src="https://placehold.co/600x400/3a3a3c/0a84ff?text=Portfolio+macOS"
                 alt="Portfolio"
               />
@@ -1017,11 +1067,12 @@
           </div>
         </section>
 
-        <!-- EXPERIENCE -->
+        <!-- VOLUNTEERING (formerly EXPERIENCE) -->
         <section id="experience">
-          <h2>Experience</h2>
+          <h2>Volunteering</h2>
+          <!-- Updated heading -->
           <div class="exp-item">
-            <h3>Project Developer (Academic)</h3>
+            <h3>Project Developer</h3>
             <div class="exp-meta">
               Government College of Engineering, Salem · May 2025 – Aug 2025
             </div>
@@ -1033,8 +1084,7 @@
           <div class="exp-item">
             <h3>Placement Coordinator</h3>
             <div class="exp-meta">
-              Government College of Engineering, Salem · Aug 2024 – Nov 2025
-            </div>
+              Government College of Engineering, Salem · Aug 2025 – Present
             <p>
               Liaison between T&P Cell and 60+ classmates. Organized weekly prep
               sessions, mock interviews.
@@ -1047,15 +1097,11 @@
           <h2>Contact</h2>
           <div class="contact-container">
             <div class="contact-info">
-              <p>
-                <i class="fas fa-map-marker-alt"></i> Villupuram, Tamil Nadu
-              </p>
+              
               <a href="mailto:jvasudevan.in@gmail.com"
-                ><i class="fas fa-envelope"></i> jvasudevan.in@gmail.com</a
+                ><i class="fas fa-envelope"></i> vasu@gmail.com</a
               >
-              <a href="#"
-                ><i class="fas fa-globe"></i> vasu-dev-portfolio.netlify.app</a
-              >
+              
               <a href="#"
                 ><i class="fab fa-linkedin"></i> linkedin.com/in/vasudevan-j</a
               >
@@ -1114,7 +1160,7 @@
       </div>
     </div>
 
-    <!-- CHATBOT (fixed) - redesigned without robot face -->
+    <!-- CHATBOT -->
     <div class="chatbot-container" id="chatbotContainer">
       <div class="chatbot-window" id="chatbotWindow">
         <div class="chatbot-header">
@@ -1139,9 +1185,8 @@
           <button id="sendChat"><i class="fas fa-paper-plane"></i></button>
         </div>
       </div>
-      <!-- Modern chat bubble icon instead of robot face -->
       <div class="chatbot-button" id="chatbotButton">
-        <i class="fas fa-comment-dots"></i>
+        <i class="fas fa-robot"></i>
       </div>
     </div>
 
@@ -1328,6 +1373,23 @@
       const themeIcon = themeToggle.querySelector("i");
       const body = document.body;
 
+      // Function to update project images based on theme
+      function updateProjectImages() {
+        const isDark = body.classList.contains("dark-theme");
+        const img1 = document.getElementById("project-img-1");
+        const img2 = document.getElementById("project-img-2");
+        if (img1) {
+          img1.src = isDark
+            ? "https://placehold.co/600x400/3a3a3c/0a84ff?text=Duty+Chart+Generator"
+            : "https://placehold.co/600x400/ffffff/0a84ff?text=Duty+Chart+Generator";
+        }
+        if (img2) {
+          img2.src = isDark
+            ? "https://placehold.co/600x400/3a3a3c/0a84ff?text=Portfolio+macOS"
+            : "https://placehold.co/600x400/ffffff/0a84ff?text=Portfolio+macOS";
+        }
+      }
+
       // Check saved theme: default to dark if none
       const savedTheme = localStorage.getItem("theme");
       if (savedTheme === "light") {
@@ -1341,6 +1403,7 @@
         themeIcon.classList.add("fa-moon");
         if (!savedTheme) localStorage.setItem("theme", "dark");
       }
+      updateProjectImages(); // set initial images
 
       themeToggle.addEventListener("click", () => {
         body.classList.toggle("dark-theme");
@@ -1353,9 +1416,10 @@
           themeIcon.classList.add("fa-sun");
           localStorage.setItem("theme", "light");
         }
+        updateProjectImages(); // update images on theme change
       });
 
-      // ========== CHATBOT FUNCTIONALITY (redesigned, no eyes) ==========
+      // ========== CHATBOT FUNCTIONALITY ==========
       const chatbotContainer = document.getElementById("chatbotContainer");
       const chatbotButton = document.getElementById("chatbotButton");
       const closeChat = document.getElementById("closeChat");
@@ -1393,7 +1457,7 @@
           ];
         } else if (text.includes("experience")) {
           return [
-            "💼 **Experience:**",
+            "💼 **Volunteering:**",
             "• Project Developer (Academic)",
             "• Placement Coordinator",
           ];
@@ -1409,7 +1473,7 @@
             "🤔 Try asking about:",
             "• skills",
             "• projects",
-            "• experience",
+            "• volunteering",
             "• contact",
           ];
         }
